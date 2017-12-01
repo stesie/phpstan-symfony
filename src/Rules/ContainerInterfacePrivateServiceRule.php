@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeWithClassName;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class ContainerInterfacePrivateServiceRule implements Rule
@@ -50,7 +51,7 @@ final class ContainerInterfacePrivateServiceRule implements Rule
 		}
 
 		$services = $this->serviceMap->getServices();
-		return $type->getClassName() === ContainerInterface::class
+		return in_array($type->getClassName(), [ContainerInterface::class, Controller::class])
 			&& isset($node->args[0])
 			&& $node->args[0] instanceof Arg
 			&& $node->args[0]->value instanceof String_
